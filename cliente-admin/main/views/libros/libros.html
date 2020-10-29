@@ -1,0 +1,152 @@
+<div class="container">
+	<div class="row">
+		<div class="card" style="width: 100%;">
+			<div class="card-body">
+				<h5 class="card-title">
+					<i class="fa fa-book"></i>
+					Gestión de libros
+				</h5>
+			</div>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-4">
+			<div class="card">
+				<div class="card-header">
+					<h5 class="text-center">{{object.id ? "Actualizar" : "Nuevo"}} libro</h5>	
+				</div>
+				<div class="card-body">
+					<form ng:submit="save()">
+						<fieldset>
+							<div class="form-group">
+								<label>Titulo</label>
+								<input type="text" class="form-control" ng:model="object.titulo" maxlength="100" required>
+							</div>
+							<div class="form-group">
+								<label>Autor</label>
+								<input type="text" class="form-control" ng:model="object.autor" maxlength="100" required>
+							</div>
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>Precio</label>
+										<input type="number" step="any" class="form-control" ng:model="object.precio" min="0.01" required>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>Año</label>
+										<input type="number" class="form-control" ng:model="object.anio" required>
+									</div>
+								</div>
+							</div>
+							<div class="custom-control custom-checkbox my-1 mr-sm-2">
+								<input type="checkbox" class="custom-control-input" id="customControlInline" ng:model="object.visible" value="true">
+								<label class="custom-control-label" for="customControlInline">
+									Visible para estudiantes
+								</label>
+							</div>
+							<br>
+							<div class="form-group">
+								<input type="file" 
+										id="file" 
+										name="file" 
+										ng-files 
+										ng-model="object.file"
+										class="form-control">
+							</div>
+							<hr>
+							<div class="text-center">
+								<button class="btn btn-primary" type="submit">
+									<i class="fa fa-save"></i>
+									Guardar
+								</button>
+								<button class="btn btn-secondary" type="button" ng:click="clean()">
+									<i class="fa fa-times"></i>
+									Cancelar
+								</button>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-8">
+			<div class="row">
+				<div class="col-6">
+					Libros registrados : {{libros.length}}
+				</div>
+				<div class="col-6">
+					<input type="text" placeholder="Buscar" class="form-control" ng:model="search">
+				</div>
+			</div>
+			<br>
+			<div class="row" style="overflow-y: auto;max-height: 70vh;">
+				<div class="col-sm-4" ng:repeat="libro in libros | filter: search">
+					<div class="card">
+						<div class="card-header bg-primary text-white">
+							<h4 ng:bind="libro.titulo"></h4>
+							<small>Autor: <span ng:bind="libro.autor"></span></small>
+						</div>
+						<div class="card-body" style="padding: 0px;">
+							<ul class="list-group">
+								<li class="list-group-item">
+									Precio: <strong ng:bind="libro.precio| currency: 'S/ '"></strong>
+								</li>
+								<li class="list-group-item">
+									Año: <strong ng:bind="libro.anio"></strong>
+								</li>
+								<li class="list-group-item text-center">
+									<span ng:show="libro.visible" class="badge badge-success">
+										Visible para estudiantes
+									</span>
+									<span ng:show="!libro.visible" class="badge badge-warning">
+										No visible para estudiantes
+									</span>
+								</li>
+							</ul>
+						</div>
+						<div class="card-footer text-center">
+							<button class="btn text-primary" ng:if="libro.url_file" ng:click="viewPdf(libro)">
+								<i class="fa fa-file-pdf"></i>
+							</button>
+							<button class="btn text-warning" ng:click="load(libro)">
+								<i class="fa fa-edit"></i>
+							</button>
+							<button class="btn text-danger" ng:click="delete(libro.id)">
+								<i class="fa fa-trash"></i>
+							</button>
+						</div>
+					</div>
+					<br>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</div>
+
+
+<div class="modal" tabindex="-1" role="dialog" id="modal-pdf" data-backdrop="static">
+    <div class="modal-dialog" role="dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+				<h5>Previsualizar</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+            </div>
+            <div class="modal-body">
+                <div ng:if="show_pdf">
+                    <object 
+                        data="{{ pdf_file }}" 
+                        type="application/pdf" 
+                        width="100%" 
+                        height="450px">
+                    </object>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,15 @@
+body{
+    background-color: #bd5d38!important;
+    height: 100%;
+}
+
+.bg-primary{
+    background: #bd5d38!important;
+}
+.text-primary{
+    color: #bd5d38!important;
+}
+.card-mi{
+    box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+    border: none !important;
+}
